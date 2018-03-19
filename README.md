@@ -1,0 +1,2 @@
+# WSI.RestApi
+RestApi application
