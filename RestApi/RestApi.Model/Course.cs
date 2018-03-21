@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace RestApi.Models
 {
@@ -10,10 +12,13 @@ namespace RestApi.Models
     public class Course
     {
         [DataMember]
-        public string name { get; set; }
+        [BsonRequired]
+        public string Name { get; set; }
         [DataMember]
-        public string teacher { get; set; }
+        [BsonRequired]
+        public string Teacher { get; set; }
         [DataMember]
-        public Grade[] grades { get; set; }
+        [BsonRequired]
+        public List<Grade> Grades { get; set; }
     }
 }

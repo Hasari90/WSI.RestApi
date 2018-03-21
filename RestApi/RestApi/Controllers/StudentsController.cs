@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using RestApi.Models;
 
 namespace RestApi.Controllers
 {
@@ -34,7 +33,7 @@ namespace RestApi.Controllers
             }
         }
 
-        public IHttpActionResult Post([FromBody]Student value)
+        public IHttpActionResult Post([FromBody]RestApi.Model.Student value)
         {
             try
             {
@@ -46,7 +45,7 @@ namespace RestApi.Controllers
             }
         }
 
-        public IHttpActionResult Put(int id, [FromBody]Student value)
+        public IHttpActionResult Put(int id, [FromBody]RestApi.Model.Student value)
         {
             try
             {
