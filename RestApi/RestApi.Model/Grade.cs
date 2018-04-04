@@ -7,7 +7,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 
-namespace RestApi.Models
+namespace RestApi.Model
 {
     [DataContract]
     public class Grade

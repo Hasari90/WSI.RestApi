@@ -1,38 +1,57 @@
 ﻿using RestApi.Repository.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using RestApi.Models;
+using RestApi.Model;
 
 namespace RestApi.Repository.Repositories
 {
     public class StudentRepository : IRepository<Student>
     {
-        private List<Student> list;
+        private List<Student> list = new List<Student>();
+
+        public StudentRepository()
+        {
+
+        }
 
         public bool Delete(string id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                list.RemoveAll(s => s.Index == Convert.ToInt32(id));
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
         }
 
         public IEnumerable<Student> GetAll()
         {
-            throw new NotImplementedException();
+            return list;
         }
 
         public Student GetById(string id)
         {
-            throw new NotImplementedException();
+            var student = list.First(s => s.Index == Convert.ToInt32(id));
+            return student;
         }
 
         public void Insert(Student model)
         {
-            throw new NotImplementedException();
+                list.Add(model);
         }
 
         public void Update(string id, Student model)
         {
-            throw new NotImplementedException();
+            var student = list.First(s => s.Index == Convert.ToInt32(id));
+
+            student.Name = model.Name;
+            student.Lastname = model.Lastname;
+            student.Date = model.Date;
         }
     }
 }

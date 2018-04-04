@@ -1,19 +1,31 @@
-﻿using System;
+﻿using RestApi.Repository.Repositories;
+using RestApi.Repository.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using RestApi.Model;
 
 namespace RestApi.Controllers
 {
     public class StudentsController : ApiController
     {
+        private IRepository<Student> studentRepository;
+
+        public StudentsController()
+        {
+            this.studentRepository = new StudentRepository();
+        }
+
         public IHttpActionResult Get()
         {
             try
             {
-                return Ok();
+                var students = studentRepository.GetAll();
+
+                return Ok(students);
             }
             catch (Exception)
             {
@@ -25,6 +37,13 @@ namespace RestApi.Controllers
         {
             try
             {
+                var student = studentRepository.GetById(id.ToString());
+
+                if (student == null)
+                {
+                    return NotFound();
+                }
+
                 return Ok();
             }
             catch (Exception)
@@ -37,6 +56,7 @@ namespace RestApi.Controllers
         {
             try
             {
+                studentRepository.Insert(value);
                 return Ok();
             }
             catch (Exception)
@@ -49,6 +69,7 @@ namespace RestApi.Controllers
         {
             try
             {
+                studentRepository.Update(id.ToString(), value);
                 return Ok();
             }
             catch (Exception)
@@ -61,7 +82,10 @@ namespace RestApi.Controllers
         {
             try
             {
-                return Ok();
+                if (studentRepository.Delete(id.ToString()))
+                    return Ok();
+                else
+                    return NotFound();
             }
             catch (Exception)
             {

@@ -2,7 +2,7 @@
 
 namespace RestApi.Repository.Interface
 {
-    interface IRepository<T>
+    public interface IRepository<T>
     {
         T GetById(string id);
         IEnumerable<T> GetAll();

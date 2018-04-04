@@ -276,12 +276,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestApi.Model\RestApi.Model.csproj">
-      <Project>{111fad2a-592e-4228-bba1-9f10d2bcbc9d}</Project>
+      <Project>{4a4ba078-ac9e-4f89-a3d6-900ef0961551}</Project>
       <Name>RestApi.Model</Name>
-      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\RestApi.Repository\RestApi.Repository.csproj">
-      <Project>{1d9efb4f-3005-4f58-9c40-80471fb8639c}</Project>
+      <Project>{5eb5c5a5-ddfc-4eb3-9466-d4f724b00e7b}</Project>
       <Name>RestApi.Repository</Name>
     </ProjectReference>
   </ItemGroup>

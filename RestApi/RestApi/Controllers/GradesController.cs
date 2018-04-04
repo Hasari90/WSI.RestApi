@@ -1,4 +1,4 @@
-﻿using RestApi.Models;
+﻿using RestApi.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,39 +12,87 @@ namespace RestApi.Controllers
     {
         [Route("api/students/{index}/courses/{course}/grades")]
         [HttpGet]
-        public IEnumerable<Models.Grade> Get()
+        public IHttpActionResult Get()
         {
-
-            return new [] { new Grade() };
+            try
+            {
+                if (true)
+                    return Ok();
+                else
+                    return NotFound();
+            }
+            catch (Exception)
+            {
+                return Conflict();
+            }
         }
 
         [Route("api/students/{index}/courses/{course}/grades/{grade}")]
         [HttpGet]
-        public Models.Grade Get(int id)
+        public IHttpActionResult Get(int id)
         {
-            return new Grade();
+            try
+            {
+                if (true)
+                    return Ok();
+                else
+                    return NotFound();
+            }
+            catch (Exception)
+            {
+                return Conflict();
+            }
         }
 
         [Route("api/students/{index}/courses/{course}/grades/{grade}")]
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IHttpActionResult Post([FromBody]string value)
         {
-
+            try
+            {
+                if (true)
+                    return Ok();
+                else
+                    return NotFound();
+            }
+            catch (Exception)
+            {
+                return Conflict();
+            }
         }
 
         [Route("api/students/{index}/courses/{course}/grades/{grade}")]
         [HttpPut]
-        public void Put(int id, [FromBody]string value)
+        public IHttpActionResult Put(int id, [FromBody]string value)
         {
-
+            try
+            {
+                if (true)
+                    return Ok();
+                else
+                    return NotFound();
+            }
+            catch (Exception)
+            {
+                return Conflict();
+            }
         }
 
         [Route("api/students/{index}/courses/{course}/grades/{grade}")]
         [HttpDelete]
-        public HttpResponseMessage Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
-
-            return Request.CreateResponse(HttpStatusCode.OK);
+            try
+            {
+                if (true)
+                    return Ok();
+                else
+                    return NotFound();
+            }
+            catch (Exception)
+            {
+                return Conflict();
+            }
         }
     }
 }
