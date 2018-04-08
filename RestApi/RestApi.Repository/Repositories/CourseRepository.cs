@@ -47,7 +47,6 @@ namespace RestApi.Repository.Repositories
             var course = list.First(s => s.Name == id);
 
             course.Teacher = model.Teacher;
-            course.Grades = model.Grades;
         }
     }
 }

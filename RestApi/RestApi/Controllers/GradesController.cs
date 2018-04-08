@@ -1,4 +1,6 @@
-﻿using RestApi.Model;
+﻿using RestApi.Base;
+using RestApi.Model;
+using RestApi.Repository.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +12,17 @@ namespace RestApi.Controllers
 {
     public class GradesController : ApiController
     {
+        private GradeRepository gradeRepository = Program.gradeRepository;
+
         [Route("api/students/{index}/courses/{course}/grades")]
         [HttpGet]
         public IHttpActionResult Get()
         {
             try
             {
-                if (true)
-                    return Ok();
-                else
-                    return NotFound();
+                var grades = gradeRepository.GetAll();
+
+                return Ok(grades);
             }
             catch (Exception)
             {
@@ -29,14 +32,18 @@ namespace RestApi.Controllers
 
         [Route("api/students/{index}/courses/{course}/grades/{grade}")]
         [HttpGet]
-        public IHttpActionResult Get(int id)
+        public IHttpActionResult Get(int index, string course)
         {
             try
             {
-                if (true)
-                    return Ok();
-                else
+                var grades = gradeRepository.GetById(index.ToString(),course);
+                
+                if (grades == null)
+                {
                     return NotFound();
+                }
+
+                return Ok(grades);
             }
             catch (Exception)
             {
@@ -44,16 +51,14 @@ namespace RestApi.Controllers
             }
         }
 
-        [Route("api/students/{index}/courses/{course}/grades/{grade}")]
+        [Route("api/students/{index}/courses/{course}/grades")]
         [HttpPost]
-        public IHttpActionResult Post([FromBody]string value)
+        public IHttpActionResult Post([FromBody]Grade value)
         {
             try
             {
-                if (true)
-                    return Ok();
-                else
-                    return NotFound();
+                gradeRepository.Insert(value);
+                return Ok();
             }
             catch (Exception)
             {
@@ -63,14 +68,12 @@ namespace RestApi.Controllers
 
         [Route("api/students/{index}/courses/{course}/grades/{grade}")]
         [HttpPut]
-        public IHttpActionResult Put(int id, [FromBody]string value)
+        public IHttpActionResult Put(int index, string course, [FromBody]Grade value)
         {
             try
             {
-                if (true)
-                    return Ok();
-                else
-                    return NotFound();
+                gradeRepository.Update(index.ToString(), value);
+                return Ok();
             }
             catch (Exception)
             {
@@ -78,13 +81,13 @@ namespace RestApi.Controllers
             }
         }
 
-        [Route("api/students/{index}/courses/{course}/grades/{grade}")]
+        [Route("api/students/{index}/courses/{course}/grades")]
         [HttpDelete]
-        public IHttpActionResult Delete(int id)
+        public IHttpActionResult Delete(int index, string course)
         {
             try
             {
-                if (true)
+                if (gradeRepository.Delete(index.ToString(),course))
                     return Ok();
                 else
                     return NotFound();

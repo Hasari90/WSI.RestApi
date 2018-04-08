@@ -7,9 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestApi", "RestApi\RestApi.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestApi.Tests", "RestApi.Tests\RestApi.Tests.csproj", "{DDEBC15C-5FD6-4743-95C7-2823CC67791F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestApi.Model", "RestApi.Model\RestApi.Model.csproj", "{4A4BA078-AC9E-4F89-A3D6-900EF0961551}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApi.Model", "RestApi.Model\RestApi.Model.csproj", "{4A4BA078-AC9E-4F89-A3D6-900EF0961551}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestApi.Repository", "RestApi.Repository\RestApi.Repository.csproj", "{5EB5C5A5-DDFC-4EB3-9466-D4F724B00E7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApi.Repository", "RestApi.Repository\RestApi.Repository.csproj", "{5EB5C5A5-DDFC-4EB3-9466-D4F724B00E7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestApi.Base", "RestApi.Base\RestApi.Base.csproj", "{DFB0D073-68A4-483F-9E7E-22A31F53B383}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{5EB5C5A5-DDFC-4EB3-9466-D4F724B00E7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EB5C5A5-DDFC-4EB3-9466-D4F724B00E7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EB5C5A5-DDFC-4EB3-9466-D4F724B00E7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFB0D073-68A4-483F-9E7E-22A31F53B383}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFB0D073-68A4-483F-9E7E-22A31F53B383}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFB0D073-68A4-483F-9E7E-22A31F53B383}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFB0D073-68A4-483F-9E7E-22A31F53B383}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

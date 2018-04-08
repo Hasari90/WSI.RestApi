@@ -20,6 +20,9 @@ namespace RestApi.Model
         public DateTime Date { get; set; }
         [DataMember]
         [BsonRequired]
-        public int IndexStudent { get; set; }
+        public string StudentIndex { get; set; }
+        [DataMember]
+        [BsonRequired]
+        public string CourseName { get; set; }
     }
 }

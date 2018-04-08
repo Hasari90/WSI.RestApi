@@ -7,17 +7,13 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using RestApi.Model;
+using RestApi.Base;
 
 namespace RestApi.Controllers
 {
     public class StudentsController : ApiController
     {
-        private IRepository<Student> studentRepository;
-
-        public StudentsController()
-        {
-            this.studentRepository = new StudentRepository();
-        }
+        private IRepository<Student> studentRepository = Program.studentRepository;
 
         public IHttpActionResult Get()
         {
@@ -44,7 +40,7 @@ namespace RestApi.Controllers
                     return NotFound();
                 }
 
-                return Ok();
+                return Ok(student);
             }
             catch (Exception)
             {

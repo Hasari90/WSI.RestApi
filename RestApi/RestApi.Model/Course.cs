@@ -11,19 +11,11 @@ namespace RestApi.Model
     [DataContract]
     public class Course
     {
-        public Course()
-        {
-            Grades = new List<Grade>();
-        }
-
         [DataMember]
         [BsonRequired]
         public string Name { get; set; }
         [DataMember]
         [BsonRequired]
         public string Teacher { get; set; }
-
-        [BsonRequired]
-        public List<Grade> Grades { get; set; }
     }
 }

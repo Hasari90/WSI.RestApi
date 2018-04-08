@@ -12,12 +12,6 @@ namespace RestApi.Model
     [DataContract]
     public class Student
     {
-        public Student()
-        {
-            Courses = new List<Course>();
-        }
-
-
         [DataMember]
         [BsonRequired]
         public int Index { get; set; }
@@ -30,8 +24,5 @@ namespace RestApi.Model
         [DataMember]
         [BsonRequired]
         public DateTime Date { get; set; }
-
-        [BsonRequired]
-        public List<Course> Courses { get; set; }
     }
 }

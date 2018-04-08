@@ -1,4 +1,5 @@
-﻿using RestApi.Model;
+﻿using RestApi.Base;
+using RestApi.Model;
 using RestApi.Repository.Repositories;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace RestApi.Controllers
 {
     public class CoursesController : ApiController
     {
-        private CourseRepository courseRepository = new CourseRepository();
+        private CourseRepository courseRepository = Program.courseRepository;
 
         [Route("api/students/{index}/courses")]
         [HttpGet]
@@ -19,9 +20,9 @@ namespace RestApi.Controllers
         {
             try
             {
-                var students = courseRepository.GetAll();
+                var courses = courseRepository.GetAll();
 
-                return Ok(students);
+                return Ok(courses);
             }
             catch (Exception)
             {
@@ -31,18 +32,18 @@ namespace RestApi.Controllers
 
         [Route("api/students/{index}/courses/{course}")]
         [HttpGet]
-        public IHttpActionResult Get(int id)
+        public IHttpActionResult Get(string course)
         {
             try
             {
-                var student = courseRepository.GetById(id.ToString());
+                var courses = courseRepository.GetById(course);
 
-                if (student == null)
+                if (courses == null)
                 {
                     return NotFound();
                 }
 
-                return Ok();
+                return Ok(courses);
             }
             catch (Exception)
             {
@@ -50,7 +51,7 @@ namespace RestApi.Controllers
             }
         }
 
-        [Route("api/students/{index}/courses/{course}")]
+        [Route("api/students/{index}/courses")]
         [HttpPost]
         public IHttpActionResult Post([FromBody]RestApi.Model.Course value)
         {
@@ -67,11 +68,11 @@ namespace RestApi.Controllers
 
         [Route("api/students/{index}/courses/{course}")]
         [HttpPut]
-        public IHttpActionResult Put(int id, [FromBody]RestApi.Model.Course value)
+        public IHttpActionResult Put(string course, [FromBody]RestApi.Model.Course value)
         {
             try
             {
-                courseRepository.Update(id.ToString(), value);
+                courseRepository.Update(course, value);
                 return Ok();
             }
             catch (Exception)
@@ -82,11 +83,11 @@ namespace RestApi.Controllers
 
         [Route("api/students/{index}/courses/{course}")]
         [HttpDelete]
-        public IHttpActionResult Delete(int id)
+        public IHttpActionResult Delete(string course)
         {
             try
             {
-                if (courseRepository.Delete(id.ToString()))
+                if (courseRepository.Delete(course))
                     return Ok();
                 else
                     return NotFound();

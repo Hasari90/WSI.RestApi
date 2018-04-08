@@ -204,6 +204,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -275,6 +276,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RestApi.Base\RestApi.Base.csproj">
+      <Project>{dfb0d073-68a4-483f-9e7e-22a31f53b383}</Project>
+      <Name>RestApi.Base</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RestApi.Model\RestApi.Model.csproj">
       <Project>{4a4ba078-ac9e-4f89-a3d6-900ef0961551}</Project>
       <Name>RestApi.Model</Name>
