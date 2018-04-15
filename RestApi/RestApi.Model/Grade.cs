@@ -12,6 +12,11 @@ namespace RestApi.Model
     [DataContract]
     public class Grade
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string ObjectId { get; set; }
+        [DataMember]
+        public int Id { get; set; }
         [DataMember]
         [BsonRequired]
         public double Mark { get; set; }
@@ -20,9 +25,9 @@ namespace RestApi.Model
         public DateTime Date { get; set; }
         [DataMember]
         [BsonRequired]
-        public string StudentIndex { get; set; }
-        [DataMember]
-        [BsonRequired]
         public string CourseName { get; set; }
+        [DataMember]
+        [BsonIgnore]
+        public Course Course { get; set; }
     }
 }

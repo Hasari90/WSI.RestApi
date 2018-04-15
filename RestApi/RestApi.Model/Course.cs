@@ -11,6 +11,9 @@ namespace RestApi.Model
     [DataContract]
     public class Course
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string ObjectId { get; set; }
         [DataMember]
         [BsonRequired]
         public string Name { get; set; }

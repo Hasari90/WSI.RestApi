@@ -37,9 +37,9 @@ namespace RestApi.Base
                 Console.WriteLine(s.Name + " " + s.Lastname + " " + s.Index.ToString());
             }
 
-            gradeRepository.Insert(new Grade() { Mark = 5.0, Date = DateTime.Now, CourseName = "Matematyka", StudentIndex = "100236" });
+            //gradeRepository.Insert(new Grade() { Mark = 5.0, Date = DateTime.Now, CourseName = "Matematyka", StudentIndex = "100236" });
 
-            gradeRepository.GetAll();
+            //gradeRepository.GetAll();
 
             Console.ReadKey();
 

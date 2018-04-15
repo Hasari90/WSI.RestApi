@@ -11,12 +11,11 @@ namespace RestApi.Repository.Repositories
     {
         private List<Grade> list = new List<Grade>();
 
-
         public bool Delete(string id, string course)
         {
             try
             {
-                list.RemoveAll(s => s.StudentIndex == id && s.CourseName == course);
+                //list.RemoveAll(s => s.StudentIndex == id && s.CourseName == course);
             }
             catch (Exception)
             {
@@ -25,10 +24,31 @@ namespace RestApi.Repository.Repositories
             return true;
         }
 
-        public Grade GetById(string id, string course)
+        public bool Delete(string id, string course, int grade)
         {
-            var grade = list.First(s => s.StudentIndex == id && s.CourseName == course);
-            return grade;
+            try
+            {
+                //list.RemoveAll(s => s.StudentIndex == id && s.CourseName == course && s.Id == grade);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public IEnumerable<Grade> GetById(string id, string course)
+        {
+            //var grades = list.Where(s => s.StudentIndex == id && s.CourseName == course);
+            //return grades;
+            return new List<Grade>();
+        }
+
+        public Grade GetById(string id, string course, int grade)
+        {
+            //var grades = list.FirstOrDefault(s => s.StudentIndex == id && s.CourseName == course && s.Id == grade);
+            //return grades;
+            return new Grade();
         }
 
         public IEnumerable<Grade> GetAll()
@@ -38,21 +58,37 @@ namespace RestApi.Repository.Repositories
 
         public Grade GetById(string id)
         {
-            var grade = list.First(s => s.StudentIndex == id);
-            return grade;
+            //var grade = list.FirstOrDefault(s => s.StudentIndex == id);
+            //return grade;
+            return new Grade();
         }
 
         public void Insert(Grade model)
         {
-            list.Add(model);
+            list.Add(new Grade()
+            {
+                Id = list.Count,
+                Mark = model.Mark,
+                Date = model.Date,
+               // StudentIndex = model.StudentIndex,
+                CourseName = model.CourseName
+            });
         }
 
         public void Update(string id, Grade model)
         {
-            var grade = list.First(s => s.StudentIndex == id && s.CourseName == model.CourseName);
-
+            // var grade = list.First(s => s.StudentIndex == id && s.CourseName == model.CourseName);
+            var grade = new Grade();
             grade.Date = model.Date;
             grade.Mark = model.Mark;
+        }
+
+        public void Update(string id, string course, int grade, Grade model)
+        {
+            //var grades = list.First(s => s.StudentIndex == id && s.CourseName == model.CourseName && s.Id == grade);
+            var grades = new Grade();
+            grades.Date = model.Date;
+            grades.Mark = model.Mark;
         }
 
         public bool Delete(string id)

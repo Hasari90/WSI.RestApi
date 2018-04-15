@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Web.Http;
 
 namespace RestApi.Controllers
@@ -14,36 +15,94 @@ namespace RestApi.Controllers
     {
         private CourseRepository courseRepository = Program.courseRepository;
 
-        [Route("api/students/{index}/courses")]
+        [Route("api/courses")]
         [HttpGet]
         public IHttpActionResult Get()
         {
-            try
+            if (Request.Headers.Accept.ToString().Contains("application/json") || Request.Headers.Accept.ToString().Contains("application/xml"))
             {
-                var courses = courseRepository.GetAll();
+                try
+                {
+                    var courses = courseRepository.GetAll();
 
-                return Ok(courses);
+                    return Ok(courses);
+                }
+                catch (Exception)
+                {
+                    return Conflict();
+                }
             }
-            catch (Exception)
+            else
             {
-                return Conflict();
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NotAcceptable));
+            }
+        }
+
+        [Route("api/students/{index}/courses/")]
+        [HttpGet]
+        public IHttpActionResult Get(int index)
+        {
+            if (Request.Headers.Accept.ToString().Contains("application/json") || Request.Headers.Accept.ToString().Contains("application/xml"))
+            {
+                try
+                {
+                    var courses = courseRepository.GetAll();
+                    //var courses = courseRepository.GetById(index);
+
+                    if (courses == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return Ok(courses);
+                }
+                catch (Exception)
+                {
+                    return Conflict();
+                }
+            }
+            else
+            {
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NotAcceptable));
             }
         }
 
         [Route("api/students/{index}/courses/{course}")]
         [HttpGet]
-        public IHttpActionResult Get(string course)
+        public IHttpActionResult Get(int index,string course)
+        {
+            if (Request.Headers.Accept.ToString().Contains("application/json") || Request.Headers.Accept.ToString().Contains("application/xml"))
+            {
+                try
+                {
+                    var courses = courseRepository.GetById(course);
+
+                    if (courses == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return Ok(courses);
+                }
+                catch(Exception)
+                {
+                    return Conflict();
+                }
+            }
+            else
+            {
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NotAcceptable));
+            }
+        }
+
+        [Route("api/students/courses")]
+        [HttpPost]
+        public IHttpActionResult Post([FromBody]RestApi.Model.Course value)
         {
             try
             {
-                var courses = courseRepository.GetById(course);
-
-                if (courses == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(courses);
+                courseRepository.Insert(value);
+                return Created(Request.RequestUri + "/" + value.Name, value);
             }
             catch (Exception)
             {
@@ -53,12 +112,12 @@ namespace RestApi.Controllers
 
         [Route("api/students/{index}/courses")]
         [HttpPost]
-        public IHttpActionResult Post([FromBody]RestApi.Model.Course value)
+        public IHttpActionResult Post(int index,[FromBody]RestApi.Model.Course value)
         {
             try
             {
                 courseRepository.Insert(value);
-                return Ok();
+                return Created(Request.RequestUri + "/" + value.Name, value);
             }
             catch (Exception)
             {

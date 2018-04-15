@@ -19,14 +19,14 @@ namespace RestApi
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            //config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue(Properties.Settings.Default.MediaTypeHeaderValue));
+            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue(Properties.Settings.Default.MediaTypeHeaderValue));
 
-            //GlobalConfiguration.Configuration.Formatters.Clear();
+            GlobalConfiguration.Configuration.Formatters.Clear();
 
-            //if (Properties.Settings.Default.SupportJson)
-            //    GlobalConfiguration.Configuration.Formatters.Add(new JsonMediaTypeFormatter());
-            //if (Properties.Settings.Default.SupportXML)
-            //    GlobalConfiguration.Configuration.Formatters.Add(new XmlMediaTypeFormatter());
+            if (Properties.Settings.Default.SupportJson)
+                GlobalConfiguration.Configuration.Formatters.Add(new JsonMediaTypeFormatter());
+            if (Properties.Settings.Default.SupportXML)
+                GlobalConfiguration.Configuration.Formatters.Add(new XmlMediaTypeFormatter());
 
         }
     }
