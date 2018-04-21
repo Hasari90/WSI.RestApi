@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RestApi.Model\RestApi.Model.csproj" />
+    <ProjectReference Include="..\RestApi.Parameter\RestApi.Parameter.csproj" />
   </ItemGroup>
 
 </Project>

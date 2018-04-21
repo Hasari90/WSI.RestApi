@@ -20,5 +20,7 @@ namespace RestApi.Model
         [DataMember]
         [BsonRequired]
         public string Teacher { get; set; }
+        [DataMember]
+        public int ESTC { get; set; }
     }
 }

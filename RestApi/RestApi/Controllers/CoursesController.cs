@@ -1,29 +1,25 @@
-﻿using RestApi.Base;
-using RestApi.Model;
+﻿using RestApi.Parameter;
 using RestApi.Repository.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Formatting;
 using System.Web.Http;
 
 namespace RestApi.Controllers
 {
     public class CoursesController : ApiController
     {
-        private CourseRepository courseRepository = Program.courseRepository;
+        private CourseRepository courseRepository = new CourseRepository();
 
         [Route("api/courses")]
         [HttpGet]
-        public IHttpActionResult Get()
+        public IHttpActionResult Get([FromUri] CourseParameter courseParameter)
         {
             if (Request.Headers.Accept.ToString().Contains("application/json") || Request.Headers.Accept.ToString().Contains("application/xml"))
             {
                 try
                 {
-                    var courses = courseRepository.GetAll();
+                    var courses = courseRepository.GetAll(courseParameter);
 
                     return Ok(courses);
                 }

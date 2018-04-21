@@ -1,29 +1,25 @@
 ﻿using RestApi.Repository.Repositories;
-using RestApi.Repository.Interface;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using RestApi.Model;
-using RestApi.Base;
-using System.Web;
-using System.Net.Http.Formatting;
+using RestApi.Parameter;
+using System.Web.Http.Cors;
 
 namespace RestApi.Controllers
 {
     public class StudentsController : ApiController
     {
-        private StudentRepository studentRepository = Program.studentRepository;
+        private StudentRepository studentRepository = new StudentRepository();
 
-        public IHttpActionResult Get()
+        [EnableCors(origins: "*", headers: "*", methods: "GET")]
+        public IHttpActionResult Get([FromUri] StudentParameter studentParameter)
         {
             if (Request.Headers.Accept.ToString().Contains("application/json") || Request.Headers.Accept.ToString().Contains("application/xml"))
             {
                 try
                 {
-                    var students = studentRepository.GetAll();
+                    var students = studentRepository.GetAll(studentParameter);
 
                     return Ok(students);
                 }

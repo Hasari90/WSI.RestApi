@@ -1,5 +1,5 @@
-﻿using RestApi.Base;
-using RestApi.Model;
+﻿using RestApi.Model;
+using RestApi.Parameter;
 using RestApi.Repository.Repositories;
 using System;
 using System.Collections.Generic;
@@ -12,18 +12,46 @@ namespace RestApi.Controllers
 {
     public class GradesController : ApiController
     {
-        private StudentRepository studentRepository = Program.studentRepository;
-        private CourseRepository courseRepository = Program.courseRepository;
+        private StudentRepository studentRepository = new StudentRepository();
+        private CourseRepository courseRepository = new CourseRepository();
 
         [Route("api/students/{index}/courses/{course}/grades")]
         [HttpGet]
-        public IHttpActionResult Get(string index, string course)
+        public IHttpActionResult Get(string index, string course, [FromUri] GradeParameter gradeParameter)
         {
             if (Request.Headers.Accept.ToString().Contains("application/json") || Request.Headers.Accept.ToString().Contains("application/xml"))
             {
                 try
                 {
-                    var grades = studentRepository.GetById(index).Grades;
+                    var student = studentRepository.GetById(index);
+
+                    if (student == null)
+                    {
+                        return NotFound();
+                    }
+
+                    var grades = student.Grades;
+                    grades = grades.Where(g => g.CourseName == course).ToList();
+
+                    if (gradeParameter.Created != null)
+                    {
+                        grades = grades.Where(g => g.Date == gradeParameter.Created).ToList();
+                    }
+
+                    if (gradeParameter.LowerGrades != null)
+                    {
+                        grades = grades.Where(g => g.Mark < gradeParameter.LowerGrades).ToList();
+                    }
+
+                    if (gradeParameter.HigherGrades != null)
+                    {
+                        grades = grades.Where(g => g.Mark > gradeParameter.HigherGrades).ToList();
+                    }
+
+                    if (gradeParameter.Value != null)
+                    {
+                        grades = grades.Where(g => g.Mark.Equals(gradeParameter.Value)).ToList();
+                    }
 
                     return Ok(grades);
                 }
@@ -106,41 +134,48 @@ namespace RestApi.Controllers
         [HttpPut]
         public IHttpActionResult Put(string index, string course, string id, [FromBody]Grade value)
         {
-            try
-            {
-                var student = studentRepository.GetById(index);
-
-                if (student == null)
+            
+                try
                 {
-                    return NotFound();
-                }
+                    if (Validation.Validate.IsCorrect(value.Mark))
+                    {
+                        var student = studentRepository.GetById(index);
 
-                var grades = student.Grades;
-                var concreateGrade = grades.Find(g => g.Id == Convert.ToInt64(id));
-                if (concreateGrade == null)
+                        if (student == null)
+                        {
+                            return NotFound();
+                        }
+
+                        var grades = student.Grades;
+                        var concreateGrade = grades.Find(g => g.Id == Convert.ToInt64(id));
+                        if (concreateGrade == null)
+                        {
+                            return Post(index, course, value);
+                        }
+                        if (value.Id == concreateGrade.Id &&
+                            value.Mark.Equals(concreateGrade.Mark) &&
+                            value.Date == concreateGrade.Date)
+                        {
+                            return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotModified, ""));
+                        }
+
+                        concreateGrade.CourseName = value.CourseName;
+                        concreateGrade.Date = value.Date;
+                        concreateGrade.Mark = value.Mark;
+
+                        studentRepository.Update(index, student);
+
+                        return Ok();
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
+                }
+                catch (Exception)
                 {
-                    return Post(index, course, value);
-                }
-                if (value.Id == concreateGrade.Id &&
-                    value.Mark.Equals(concreateGrade.Mark) &&
-                    value.Date == concreateGrade.Date)
-                {
-                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotModified, ""));
-                }
-
-                concreateGrade.CourseName = value.CourseName;
-                concreateGrade.Date = value.Date;
-                concreateGrade.Mark = value.Mark;
-
-                studentRepository.Update(index, student);
-
-                return Ok();
-
-            }
-            catch (Exception)
-            {
-                return Conflict();
-            }
+                    return Conflict();
+                } 
         }
 
         [Route("api/students/{index}/courses/{course}/grades/{id}")]
