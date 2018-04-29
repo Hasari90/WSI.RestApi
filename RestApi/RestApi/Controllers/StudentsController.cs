@@ -27,8 +27,10 @@ namespace RestApi.Controllers
                     var list = students as IList<Student> ?? students.ToList();
                     foreach (var student in list)
                     {
-                        student.Links = new List<Link>();
-                        student.Links.Add(new Link() { Href = Request.RequestUri.ToString().Split('?').First() + string.Format("/{0}", student.Index), Rel = "student" });
+                        student.Links = new List<Link>
+                        {
+                            new Link() { Href = Request.RequestUri.ToString().Split('?').First() + string.Format("/{0}", student.Index), Rel = "student" }
+                        };
                     }
 
                     return Ok(list);
@@ -61,11 +63,12 @@ namespace RestApi.Controllers
 
                     var s = Request.RequestUri.ToString().LastIndexOf("/");
 
-                    student.Links = new List<Link>();
-
-                    student.Links.Add(new Link() { Href = Request.RequestUri.ToString().Split('?').First(), Rel = "self" });
-                    student.Links.Add(new Link() { Href = Request.RequestUri.ToString().Split('?').First().Substring(0, s), Rel = "parent" });
-                    student.Links.Add(new Link() { Href = Request.RequestUri.ToString().Split('?').First() + "/courses", Rel = "courses" });
+                    student.Links = new List<Link>
+                    {
+                        new Link() { Href = Request.RequestUri.ToString().Split('?').First(), Rel = "self" },
+                        new Link() { Href = Request.RequestUri.ToString().Split('?').First().Substring(0, s), Rel = "parent" },
+                        new Link() { Href = Request.RequestUri.ToString().Split('?').First() + "/courses", Rel = "courses" }
+                    };
 
                     return Ok(student);
                 }

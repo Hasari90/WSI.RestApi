@@ -2,8 +2,6 @@
 using RestApi.Repository.Interface;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace RestApi.Repository.Repositories
 {
@@ -78,17 +76,21 @@ namespace RestApi.Repository.Repositories
         public void Update(string id, Grade model)
         {
             // var grade = list.First(s => s.StudentIndex == id && s.CourseName == model.CourseName);
-            var grade = new Grade();
-            grade.Date = model.Date;
-            grade.Mark = model.Mark;
+            var grade = new Grade
+            {
+                Date = model.Date,
+                Mark = model.Mark
+            };
         }
 
         public void Update(string id, string course, int grade, Grade model)
         {
             //var grades = list.First(s => s.StudentIndex == id && s.CourseName == model.CourseName && s.Id == grade);
-            var grades = new Grade();
-            grades.Date = model.Date;
-            grades.Mark = model.Mark;
+            var grades = new Grade
+            {
+                Date = model.Date,
+                Mark = model.Mark
+            };
         }
 
         public bool Delete(string id)

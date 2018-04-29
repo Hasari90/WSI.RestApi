@@ -2,7 +2,6 @@
 using System.Runtime.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoRepository;
 
 namespace RestApi.Model
 {
