@@ -5,6 +5,9 @@ using System.Net.Http;
 using System.Web.Http;
 using RestApi.Parameter;
 using System.Web.Http.Cors;
+using RestApi.Model;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RestApi.Controllers
 {
@@ -21,7 +24,14 @@ namespace RestApi.Controllers
                 {
                     var students = studentRepository.GetAll(studentParameter);
 
-                    return Ok(students);
+                    var list = students as IList<Student> ?? students.ToList();
+                    foreach (var student in list)
+                    {
+                        student.Links = new List<Link>();
+                        student.Links.Add(new Link() { Href = Request.RequestUri.ToString().Split('?').First() + string.Format("/{0}", student.Index), Rel = "student" });
+                    }
+
+                    return Ok(list);
                 }
                 catch (Exception)
                 {
@@ -34,6 +44,7 @@ namespace RestApi.Controllers
             }
         }
 
+        [EnableCors(origins: "*", headers: "*", methods: "GET")]
         public IHttpActionResult Get(int id)
         {
 
@@ -47,6 +58,14 @@ namespace RestApi.Controllers
                     {
                         return NotFound();
                     }
+
+                    var s = Request.RequestUri.ToString().LastIndexOf("/");
+
+                    student.Links = new List<Link>();
+
+                    student.Links.Add(new Link() { Href = Request.RequestUri.ToString().Split('?').First(), Rel = "self" });
+                    student.Links.Add(new Link() { Href = Request.RequestUri.ToString().Split('?').First().Substring(0, s), Rel = "parent" });
+                    student.Links.Add(new Link() { Href = Request.RequestUri.ToString().Split('?').First() + "/courses", Rel = "courses" });
 
                     return Ok(student);
                 }

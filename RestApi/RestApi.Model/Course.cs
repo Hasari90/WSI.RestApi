@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Web;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoRepository;
 
 namespace RestApi.Model
 {
@@ -21,6 +19,11 @@ namespace RestApi.Model
         [BsonRequired]
         public string Teacher { get; set; }
         [DataMember]
-        public int ESTC { get; set; }
+        [BsonRequired]
+        public int ECTS { get; set; }
+        [DataMember]
+        [BsonIgnore]
+        public List<Link> Links { get; set; }
+        
     }
 }

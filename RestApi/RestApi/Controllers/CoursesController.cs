@@ -4,6 +4,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace RestApi.Controllers
 {
@@ -11,6 +12,7 @@ namespace RestApi.Controllers
     {
         private CourseRepository courseRepository = new CourseRepository();
 
+        [EnableCors(origins: "*", headers: "*", methods: "GET")]
         [Route("api/courses")]
         [HttpGet]
         public IHttpActionResult Get([FromUri] CourseParameter courseParameter)
@@ -34,6 +36,7 @@ namespace RestApi.Controllers
             }
         }
 
+        [EnableCors(origins: "*", headers: "*", methods: "GET")]
         [Route("api/students/{index}/courses/")]
         [HttpGet]
         public IHttpActionResult Get(int index)
@@ -91,7 +94,7 @@ namespace RestApi.Controllers
             }
         }
 
-        [Route("api/students/courses")]
+        [Route("api/courses")]
         [HttpPost]
         public IHttpActionResult Post([FromBody]RestApi.Model.Course value)
         {

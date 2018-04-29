@@ -31,8 +31,12 @@ namespace RestApi.Model
         public string Lastname { get; set; }
         [DataMember]
         [BsonRequired]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime Date { get; set; }
         [BsonRequired]
         public List<Grade> Grades { get; set; }
+        [DataMember]
+        [BsonIgnore]
+        public List<Link> Links { get; set; }
     }
 }

@@ -7,6 +7,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace RestApi.Controllers
 {
@@ -15,6 +18,7 @@ namespace RestApi.Controllers
         private StudentRepository studentRepository = new StudentRepository();
         private CourseRepository courseRepository = new CourseRepository();
 
+        [EnableCors(origins: "*", headers: "*", methods: "GET")]
         [Route("api/students/{index}/courses/{course}/grades")]
         [HttpGet]
         public IHttpActionResult Get(string index, string course, [FromUri] GradeParameter gradeParameter)
@@ -66,6 +70,7 @@ namespace RestApi.Controllers
             }
         }
 
+        [EnableCors(origins: "*", headers: "*", methods: "GET")]
         [Route("api/students/{index}/courses/{course}/grades/{id}")]
         [HttpGet]
         public IHttpActionResult Get(string index, string course, int id)
@@ -106,15 +111,15 @@ namespace RestApi.Controllers
                 {
                     var student = studentRepository.GetById(index);
                     var courses = courseRepository.GetById(course);
-                    if (student.Grades != null)
+                    if (student.Grades != null && student.Grades.Count > 0)
                         value.Id = student.Grades.Max(g => g.Id) + 1;
                     else
                     {
                         value.Id = 0;
                         student.Grades = new List<Grade>();
                     }
-                    value.Course = courses;
-                   student.Grades.Add(value);
+                    value.Course = new MongoDBRef(nameof(courses), ObjectId.Parse(courses.ObjectId));
+                    student.Grades.Add(value);
 
                    studentRepository.Update(index, student);
                    return Created(Request.RequestUri + "/" + value.Id.ToString(), value);

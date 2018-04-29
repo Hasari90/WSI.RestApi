@@ -77,7 +77,16 @@ namespace RestApi.Repository.Repositories
 
         public Student GetById(string id)
         {
-            return mongoCollection.AsQueryable<Student>().Where(s => s.Index == Convert.ToInt32(id)).Single();
+            
+            try
+            {
+            var student = mongoCollection.AsQueryable<Student>().Where(s => s.Index == Convert.ToInt32(id)).Single();
+                return student;
+            }
+            catch(Exception)
+            {
+                return null;
+            }  
         }
 
         public void Insert(Student model)

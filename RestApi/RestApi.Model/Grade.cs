@@ -5,6 +5,8 @@ using System.Runtime.Serialization;
 using System.Web;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
+using MongoRepository;
 
 
 namespace RestApi.Model
@@ -16,18 +18,23 @@ namespace RestApi.Model
         [BsonRepresentation(BsonType.ObjectId)]
         public string ObjectId { get; set; }
         [DataMember]
+        [BsonRequired]
         public int Id { get; set; }
         [DataMember]
         [BsonRequired]
         public double Mark { get; set; }
         [DataMember]
         [BsonRequired]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime Date { get; set; }
         [DataMember]
         [BsonRequired]
         public string CourseName { get; set; }
         [DataMember]
+        [BsonRequired]
+        public MongoDBRef Course { get; set; }
+        [DataMember]
         [BsonIgnore]
-        public Course Course { get; set; }
+        public List<Link> Links { get; set; }
     }
 }

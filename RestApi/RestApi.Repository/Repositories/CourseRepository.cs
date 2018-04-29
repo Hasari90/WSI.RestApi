@@ -83,7 +83,15 @@ namespace RestApi.Repository.Repositories
 
         public Course GetById(string id)
         {
-            return mongoCollection.AsQueryable<Course>().Where(c => c.Name == id).Single();
+            try
+            {
+                var course = mongoCollection.AsQueryable<Course>().Where(c => c.Name == id).Single();
+                return course;
+            }
+            catch(Exception)
+            {
+                return null;
+            }
         }
 
         public void Insert(Course model)
