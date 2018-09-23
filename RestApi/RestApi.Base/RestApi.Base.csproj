@@ -50,11 +50,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestApi.Model\RestApi.Model.csproj">
-      <Project>{4a4ba078-ac9e-4f89-a3d6-900ef0961551}</Project>
+      <Project>{049b0e88-074b-4ed2-8df2-6b093e104894}</Project>
       <Name>RestApi.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\RestApi.Repository\RestApi.Repository.csproj">
-      <Project>{5eb5c5a5-ddfc-4eb3-9466-d4f724b00e7b}</Project>
+      <Project>{0772ea92-37be-415a-84ee-8690ced3af10}</Project>
       <Name>RestApi.Repository</Name>
     </ProjectReference>
   </ItemGroup>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace RestApi
 {
@@ -13,11 +14,18 @@ namespace RestApi
         {
             config.MapHttpAttributeRoutes();
 
+
+            var cors = new EnableCorsAttribute("*", "*", "*", "*");
+            config.EnableCors(cors);
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            DefaultContentNegotiator defaultNegotiator = new DefaultContentNegotiator(excludeMatchOnTypeOnly: true);
+            config.Services.Replace(typeof(IContentNegotiator), defaultNegotiator);
 
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue(Properties.Settings.Default.MediaTypeHeaderValue));
 
@@ -27,7 +35,6 @@ namespace RestApi
                 GlobalConfiguration.Configuration.Formatters.Add(new JsonMediaTypeFormatter());
             if (Properties.Settings.Default.SupportXML)
                 GlobalConfiguration.Configuration.Formatters.Add(new XmlMediaTypeFormatter());
-
         }
     }
 }

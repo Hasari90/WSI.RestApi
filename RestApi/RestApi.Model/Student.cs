@@ -1,38 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Web;
+using System.Xml.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-
+using MongoDB.Driver;
+using RestApi.Model.Interface;
 
 namespace RestApi.Model
 {
-    [DataContract]
-    public class Student
+    public class Student : IId<ObjectId>
     {
-        public Student()
-        {
-            Grades = new List<Grade>();
-        }
-
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string ObjectId { get; set; }
-        [DataMember]
-        [BsonRequired]
-        public int Index { get; set; }
-        [DataMember]
-        [BsonRequired]
-        public string Name { get; set; }
-        [DataMember]
-        [BsonRequired]
-        public string Lastname { get; set; }
-        [DataMember]
-        [BsonRequired]
-        public DateTime Date { get; set; }
-        [BsonRequired]
+        public ObjectId Id { get; set; }
+        public string Index { get; set; } 
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string BirthDate { get; set; }
+
+        [BsonIgnoreIfDefault]
         public List<Grade> Grades { get; set; }
+        [BsonIgnoreIfDefault]
+        public List<MongoDBRef> SignedUpCourses { get; set; }
     }
 }

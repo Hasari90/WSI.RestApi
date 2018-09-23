@@ -1,0 +1,313 @@
+                                              body {
+                                                  font-size: 1em;
+                                                  font-family: Arial, Helvetica, sans-serif;
+                                                  background: #ABA0CC;
+                                                  line-height: 1.2em;
+                                                  width: 100%;
+                                                  margin: 0;
+                                              }
+                                              
+                                              header {
+                                                  text-align: center;
+                                              }
+                                              
+                                              #title {
+                                                  font-family: 'Courier New';
+                                                  font-weight: bold;
+                                                  line-height: 1.1em;
+                                                  margin: 0 0 .5em 0;
+                                                  font-size: 1.7em;
+                                                  color: #4D3E7F;
+                                              }
+                                              
+                                              a {
+                                                  color: #D5C8FF;
+                                                  text-decoration: none;
+                                              }
+                                              
+                                              a:hover,
+                                              a:active {
+                                                  text-decoration: underline;
+                                              }
+                                              
+                                              a.button {
+                                                  -webkit-appearance: button;
+                                                  text-decoration: none;
+                                                  color: #D5C8FF;
+                                                  background: #4D3E7F;
+                                                  width: 150px;
+                                                  text-align: center;
+                                                  font-size: 0.8em;
+                                              }
+                                              /*------------------------- TABLE -----------------------*/
+                                              
+                                              table {
+                                                  border-collapse: collapse;
+                                                  width: 100%;
+                                                  border-spacing: 0;
+                                              }
+                                              
+                                              th,
+                                              td {
+                                                  text-align: center;
+                                                  padding: 8px;
+                                              }
+                                              
+                                              th {
+                                                  background-color: #9B7CFF;
+                                                  color: #6B647F;
+                                              }
+                                              
+                                              table tbody tr:hover {
+                                                  background: #4D3E7F;
+                                                  border-style: solid;
+                                                  border-width: 3px;
+                                                  border-color: #4D3E7F;
+                                              }
+                                              
+                                              table tbody tr:nth-child(odd) {
+                                                  background: #6B647F;
+                                              }
+                                              /*------------------------- NAVBAR -----------------------*/
+                                              
+                                              #navbar {
+                                                  width: 100%;
+                                                  transition: top 0.3s;
+                                                  margin-bottom: 10px;
+                                              }
+                                              
+                                              #navbar a {
+                                                  float: left;
+                                                  display: block;
+                                                  color: white;
+                                                  text-align: center;
+                                                  font-weight: bold;
+                                                  padding: 15px;
+                                                  text-decoration: none;
+                                              }
+                                              
+                                              #navbar a:hover {
+                                                  font-weight: bold;
+                                                  color: #4D3E7F;
+                                              }
+                                              
+                                              .navbar .menu li {
+                                                  flex: 1;
+                                                  display: flex;
+                                                  text-align: center;
+                                              }
+                                              
+                                              .navbar .menu a {
+                                                  flex: 1;
+                                                  justify-content: center;
+                                                  color: #ffffff;
+                                                  padding: 20px;
+                                              }
+                                              
+                                              @media all and (max-width: 1000px) {
+                                                  .menu {
+                                                      flex-wrap: wrap;
+                                                  }
+                                                  .menu>li {
+                                                      flex-basis: 50%;
+                                                  }
+                                                  .navbar .menu {
+                                                      display: flex;
+                                                      position: relative;
+                                                      margin-bottom: 0px;
+                                                      margin-top: 0px;
+                                                  }
+                                              }
+                                              
+                                              @media only screen and (max-width: 768px) {
+                                                  .navbar__Items,
+                                                  .navbar {
+                                                      flex-direction: column;
+                                                  }
+                                                  .navbar__Items--right {
+                                                      margin-left: 0;
+                                                  }
+                                              }
+                                              /*------------------------- MAIN -----------------------*/
+                                              
+                                              main {
+                                                  display: flex;
+                                                  flex-flow: row wrap;
+                                              }
+                                              
+                                              main section {
+                                                  display: none;
+                                              }
+                                              
+                                              main section:target {
+                                                  display: block;
+                                              }
+                                              
+                                              input:invalid {
+                                                  border-style: solid;
+                                                  border-width: 1px;
+                                                  border-color: red;
+                                              }
+                                              
+                                              #container-sidenav {
+                                                  flex: 1 100%;
+                                              }
+                                              
+                                              #container-header,
+                                              #container-footer {
+                                                  flex: 1 100%;
+                                              }
+                                              
+                                              .menu-element {
+                                                  display: block;
+                                                  text-align: center;
+                                                  padding: 10px 0;
+                                              }
+                                              
+                                              .menu-element:visited {
+                                                  color: inherit;
+                                              }
+                                              
+                                              @media all and (min-width: 768px) {
+                                                  #container-sidenav {
+                                                      width: 200px;
+                                                      flex: 0 auto;
+                                                  }
+                                                  #container-content {
+                                                      flex: 2 0px;
+                                                  }
+                                                  #container-header {
+                                                      order: 1;
+                                                  }
+                                                  #container-sidenav {
+                                                      order: 2;
+                                                  }
+                                                  #container-content {
+                                                      order: 3;
+                                                  }
+                                                  #container-footer {
+                                                      order: 4;
+                                                  }
+                                              }
+                                              
+                                              #container-header {
+                                                  background-color: #ABA0CC;
+                                                  display: flex;
+                                                  align-items: center;
+                                                  font-family: Arial, Helvetica, sans-serif;
+                                              }
+                                              
+                                              #container-sidenav {
+                                                  background: linear-gradient(#ABA0CC, #9B7CFF);
+                                                  font-family: inherit;
+                                                  font-size: 1.5em;
+                                                  color: #4D3E7F;
+                                              }
+                                              
+                                              #container-content {
+                                                  font-family: inherit;
+                                                  font-size: 1.25em;
+                                                  padding: 25px;
+                                              }
+                                              
+                                              #container-footer {
+                                                  background-color: #9B7CFF;
+                                                  font-family: Arial, Helvetica, sans-serif;
+                                                  font-size: 0.75em;
+                                                  padding: 10px;
+                                                  color: #D5C8FF;
+                                                  padding-top: 20px;
+                                                  margin-bottom: 10px;
+                                              }
+                                              
+                                              #container-footer p {
+                                                  text-align: right;
+                                                  text-transform: uppercase;
+                                                  font-size: 80%;
+                                                  color: #4D3E7F;
+                                              }
+                                              
+                                              #logo {
+                                                  width: 50px;
+                                                  object-fit: contain;
+                                                  margin: 15px 15px 15px 0;
+                                              }
+                                              
+                                              .editor {
+                                                  display: flex;
+                                                  flex-flow: column wrap;
+                                                  justify-content: center;
+                                              }
+                                              
+                                              .editor input {
+                                                  font-size: 1em;
+                                              }
+                                              
+                                              .editor>* {
+                                                  margin: 10px;
+                                              }
+                                              
+                                              .table-row-options {
+                                                  display: block;
+                                              }
+                                              /*-----------------------------PRINT----------------------------------*/
+                                              
+                                              @media print {
+                                                  p.bodyText {
+                                                      font-family: georgia, times, serif;
+                                                  }
+                                                  #container-header,
+                                                  #container-sidenav,
+                                                  .tableHeaderFilter,
+                                                  .add-link,
+                                                  .icon-container-row,
+                                                  .list-options a,
+                                                  footer {
+                                                      display: none;
+                                                  }
+                                                  td {
+                                                      border-top: 2px solid black;
+                                                      font-size: 0.8em;
+                                                  }
+                                                  th {
+                                                      font-size: 1em;
+                                                  }
+                                                  h1 {
+                                                      font-size: 14pt;
+                                                  }
+                                                  h2 {
+                                                      font-size: 12pt;
+                                                      margin-top: 25px;
+                                                  }
+                                                  aside h2 {
+                                                      font-size: 12pt;
+                                                  }
+                                                  blockquote,
+                                                  ul {
+                                                      margin: 0;
+                                                  }
+                                                  ul {
+                                                      list-style: none;
+                                                  }
+                                                  p {
+                                                      display: none;
+                                                  }
+                                                  .hidding {
+                                                      display: none;
+                                                  }
+                                                  a {
+                                                      display: none;
+                                                  }
+                                              }
+                                              /*-----------------------------ICONS----------------------------------*/
+                                              
+                                              .icon-container-row {
+                                                  display: flex;
+                                                  flex-flow: row wrap;
+                                              }
+                                              
+                                              .list-options a {
+                                                  background-size: 25px;
+                                                  width: 25px;
+                                                  padding: 25px 0;
+                                              }

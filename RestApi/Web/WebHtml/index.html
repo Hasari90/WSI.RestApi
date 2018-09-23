@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+
+<head>
+    <title>Student manager</title>
+    <meta name="author" content="Hubert Janus" />
+    <meta name="description" content="Strona dla studentów" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+
+    <script src='js/jquery.js'></script>
+    <script src='js/knockout-3.4.2.js'></script>
+    <script src='js/knockout.mapping.js'></script>
+    <script src="js/scripts.js"></script>
+</head>
+
+<body>
+    <main>
+        <header id="container-header">
+            <img id="logo" src="img/student_min.png" alt="Student manager" />
+            <p id="title">Student manager</p>
+        </header>
+
+        <aside id="container-sidenav">
+            <nav id="navbar" class="navbar">
+                <ul class="menu">
+                    <li>
+                        <a class="menu-element" href="#home"><i class="fa fa-fw fa-home"></i>Strona główna</a>
+                    </li>
+                    <li>
+                        <a class="menu-element" href="#students" onclick="GetStudents();">Studenci</a>
+                    </li>
+                    <li>
+                        <a class="menu-element" href="#courses" onclick="GetCourses();">Przedmioty</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <div id="container-content">
+            <section id="home">
+                <header>
+                    <h2>Student Manager</h2>
+                </header>
+                <div class="section-body">
+                    <p>Strona służąca co zarządzania studentami oraz ocenami z przedmiotów.</p>
+                </div>
+            </section>
+
+            <section id="students">
+                <header>
+                    <h2>Studenci</h2>
+                </header>
+                <div class="section-body">
+                    <a class="add-link button" href="#student-add" onclick="ClearStudentEditor()"><i class="fa fa-plus"></i>Dodaj studenta</a>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    Indeks
+                                    <p><input class="tableHeaderFilter studentsFilter" placeholder="Indeks" data-bind="textInput: IndexFilter"></p>
+                                </th>
+                                <th>
+                                    Imię
+                                    <p><input class="tableHeaderFilter studentsFilter" placeholder="Imię" data-bind="textInput: FirstnameFilter"></p>
+                                </th>
+                                <th>
+                                    Nazwisko
+                                    <p><input class="tableHeaderFilter studentsFilter" placeholder="Nazwisko" data-bind="textInput: LastnameFilter"></p>
+                                </th>
+                                <th>
+                                    Data urodzenia
+                                    <p>Od <input type="date" class="tableHeaderFilter studentsFilter" data-bind="textInput: BirthDateFromFilter"> do
+                                        <input type="date" class="tableHeaderFilter studentsFilter" data-bind="textInput: BirthDateToFilter"></p>
+                                </th>
+                                <th class="hidding" style="width:10%;">Opcje</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: list">
+                            <tr>
+                                <td data-bind="text: Index" contenteditable='true'></td>
+                                <td data-bind="text: FirstName" contenteditable='true'></td>
+                                <td data-bind="text: LastName" contenteditable='true'></td>
+                                <td data-bind="text: BirthDate" contenteditable='true'></td>
+                                <td class="icon-container-row list-options ">
+                                    <a href="#student-details" class="fa fa-address-card hidding" data-bind="attr: { 'data-index': $index }" onclick="GetStudentDetails(this.dataset.index)"></a>
+                                    <a href="#student-courses" class="fa fa-book hidding" data-bind="attr: { 'data-index': Index }" onclick="GetStudentCourses(this.dataset.index)"></a>
+                                    <a href="#student-editor" class="fa fa-edit hidding" data-bind="attr: { 'data-index': $index }" onclick="GetStudentEditor(this.dataset.index)"></a>
+                                    <a href="#students" class="fa fa-trash hidding" onclick="DeleteStudent(this.dataset.studentindex)" data-bind="attr: { 'data-studentindex': Index }"></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section id="courses">
+                <header>
+                    <h2>Przedmioty</h2>
+                </header>
+                <div class="section-body">
+                    <a class="add-link button" href="#course-editor" onclick="ClearCourseEditor()"><i class="fa fa-plus"></i>Dodaj przedmiot</a>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    Nazwa przedmiotu
+                                    <br /><input class="tableHeaderFilter coursesFilter" placeholder="Nazwa" data-bind="textInput: NameFilter">
+                                </th>
+                                <th>
+                                    Wykładowca
+                                    <br /><input class="tableHeaderFilter coursesFilter" placeholder="Wykładowca" data-bind="textInput: LeadTeacherFilter">
+                                </th>
+                                <th>
+                                    ECTS
+                                </th>
+                                <th style="width:10%;">Opcje</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: list">
+                            <tr>
+                                <td data-bind="text: Name"></td>
+                                <td data-bind="text: LeadTeacher"></td>
+                                <td data-bind="text: ECTS"></td>
+                                <td class="icon-container-row list-options">
+                                    <a href="#course-details" class="fa fa-address-card" data-bind="attr: { 'data-index': $index }" onclick="GetCourseDetails(this.dataset.index)"></a>
+                                    <a href="#course-editor" class="fa fa-edit" data-bind="attr: { 'data-index': $index }" onclick="GetCourseEditor(this.dataset.index)"></a>
+                                    <a href="#courses" class="fa fa-trash" data-bind="attr: { 'data-objectid': Id }" onclick="DeleteCourse(this.dataset.objectid)"></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section id="student-courses">
+                <a class="add-link button" href="#students">
+                    Powrót</a>
+                <header>
+                    <h2>Przedmioty przypisane do studenta:</h2>
+                </header>
+                <a class="add-link button" href="#student-course-editor" onclick="GetStudentCourseEditor()"><i class="fa fa-plus"></i>Dodaj dodatowy przedmiot</a>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                Nazwa przedmiotu
+                                <br /><input class="tableHeaderFilter studentCoursesFilter" placeholder="Nazwa" data-bind="textInput: NameFilter">
+                            </th>
+                            <th>
+                                Wykładowca
+                                <br /><input class="tableHeaderFilter studentCoursesFilter" placeholder="Wykładowca" data-bind="textInput: LeadTeacherFilter">
+                            </th>
+                            <th>ECTS</th>
+                            <th style="width:10%;">Opcje</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: list">
+                        <tr>
+                            <td data-bind="text: Name"></td>
+                            <td data-bind="text: LeadTeacher"></td>
+                            <td data-bind="text: ECTS"></td>
+                            <td class="icon-container-row list-options">
+                                <a href="#student-course-grades" class="grade-icon" data-bind="attr: { 'data-courseid': Id }" onclick="GetCourseGrades(this.dataset.courseid)"></a>
+                                <a href="#student-courses" data-bind="attr: { 'data-courseid': Id }" onclick="DeleteStudentCourse(this.dataset.courseid)" class="fa fa-trash"></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section id="student-course-grades">
+                <a class="add-link button" href="#student-courses">
+                    Powrót</a>
+                <header>
+                    <h2>Oceny z przedmitu:</h2>
+                </header>
+                <a class="add-link button" href="#student-course-grade-editor" onclick="GetStudentCourseGradeEditor()"><i class="fa fa-plus"></i>Dodaj ocenę</a>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                Data dodania
+                            </th>
+                            <th>
+                                Ocena
+                            </th>
+                            <th style="width:10%;">Opcje</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: list">
+                        <tr>
+                            <td data-bind="text: AddedDate"></td>
+                            <td data-bind="text: GradeValue"></td>
+                            <td class="icon-container-row list-options">
+                                <a href="#student-course-grades" data-bind="attr: { 'data-gradeid': Id }" onclick="DeleteStudentCourseGrade(this.dataset.gradeid)" class="fa fa-trash"></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="student-editor">
+                <a class="add-link button" href="#students">
+                    Powrót</a>
+                <header>
+                    <h2>Edycja danych studenta</h2>
+                </header>
+                <form id="student-form" class="editor" onsubmit="CreateUpdateStudent()">
+                    <p>Indeks: <span data-bind="text: Index"></span></p>
+                    <p>Imię: <input type="text" data-bind="value: FirstName" required="required" placeholder="Imię" /></p>
+                    <p>Nazwisko: <input type="text" data-bind="value: LastName" required="required" placeholder="Nazwisko" /></p>
+                    <p>Data urodzenia: <input type="date" data-bind="value: BirthDate" required="required" /></p>
+                    <input type="submit">
+                </form>
+            </section>
+            <section id="student-add">
+                <a class="add-link button" href="#students">
+                        Powrót</a>
+                <header>
+                    <h2>Dodawanie studenta</h2>
+                </header>
+                <form id="student-add" class="editor" onsubmit="CreateUpdateStudent()">
+                    <p>Indeks: <input type="number" data-bind="textInput: Index" required="required" placeholder="Indeks" /></p>
+                    <p>Imię: <input type="text" data-bind="value: FirstName" required="required" placeholder="Imię" /></p>
+                    <p>Nazwisko: <input type="text" data-bind="value: LastName" required="required" placeholder="Nazwisko" /></p>
+                    <p>Data urodzenia: <input type="date" data-bind="value: BirthDate" required="required" /></p>
+                    <input type="submit">
+                </form>
+            </section>
+            <section id="course-editor">
+                <a class="add-link button" href="#courses">
+                    Powrót</a>
+                <header>
+                    <h2>Edycja danych przedmiotu</h2>
+                </header>
+                <form id="course-form" class="editor" onsubmit="CreateUpdateCourse()">
+                    <p>Nazwa przedmiotu: <input type="text" data-bind="textInput: Name" required="required" placeholder="Nazwa przedmiotu" /></p>
+                    <p>Wykładowca: <input type="text" data-bind="value: LeadTeacher" required="required" placeholder="Wykładowca" /></p>
+                    <p>ECTS: <input type="text" data-bind="numeric, value: ECTS" required="required" placeholder="ECTS" /></p>
+                    <input type="submit">
+                </form>
+            </section>
+            <section id="student-course-editor">
+                <a class="add-link button" href="#student-courses">
+                    Powrót</a>
+                <header>
+                    <h2>Przypisywania studenta do przedmiotu</h2>
+                </header>
+                <form id="student-course-form" class="editor" onsubmit="CreateStudentCourse()">
+                    <p>Przedmioty: <select data-bind="options: CourseList.list,
+                        optionsText: function(item) {
+                            return item.Name;
+                        },
+                        value: Course,
+                        optionsCaption: 'Wybierz przedmiot ...'"></select></p>
+                    <input type="submit">
+                </form>
+            </section>
+            <section id="student-course-grade-editor">
+                <a class="add-link button" href="#student-course-grades">
+                    Powrót</a>
+                <header>
+                    <h2>Edycja ocen z przedmiotu</h2>
+                </header>
+                <form id="student-course-grade-form" class="editor" onsubmit="CreateStudentCourseGrade()">
+                    <p>Ocena: <input name="grade" data-bind="textInput: GradeValue" required="required" placeholder="Ocena" /></p>
+                    <input type="submit">
+                </form>
+            </section>
+
+            <section id="student-details">
+                <a class="add-link button" href="#students">
+                    Powrót</a>
+                <header>
+                    <h2>Informacje o studencie</h2>
+                </header>
+                <p>Indeks:<span data-bind="text: Index"></span></p>
+                <p>Imię:<span data-bind="text: FirstName"></span></p>
+                <p>Nazwisko:<span data-bind="text: LastName"></span></p>
+                <p>Data urodzenia:<span data-bind="text: BirthDate"></span></p>
+            </section>
+            <section id="course-details">
+                <a class="add-link button" href="#courses">
+                    Powrót</a>
+                <header>
+                    <h2>Informacje o przedmiocie</h2>
+                </header>
+                <p>Nazwa przedmiotu:<span data-bind="text: Name"></span></p>
+                <p>Wykładowca:<span data-bind="text: LeadTeacher"></span></p>
+                <p>ECTS:<span data-bind="text: ECTS"></span></p>
+            </section>
+        </div>
+
+        <footer id="container-footer">
+            <p>
+                Strona utworzona przez <a href="https://github.com/Hasari90" target="_blank">[Hubert Janus]</a>
+            </p>
+            <p>
+                <a href="https://www.put.poznan.pl/" target="_blank">Politechnika Poznańska</a>
+            </p>
+        </footer>
+    </main>
+</body>
+
+</html>

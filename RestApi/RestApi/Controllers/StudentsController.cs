@@ -1,118 +1,102 @@
-﻿using RestApi.Repository.Repositories;
-using RestApi.Repository.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System;
 using System.Web.Http;
 using RestApi.Model;
-using RestApi.Base;
-using System.Web;
-using System.Net.Http.Formatting;
+using System.Linq;
+using MongoDB.Driver;
 
 namespace RestApi.Controllers
 {
-    public class StudentsController : ApiController
+    [RoutePrefix("api/students")]
+    public class StudentsController : BaseApiController<Student>
     {
-        private StudentRepository studentRepository = Program.studentRepository;
-
-        public IHttpActionResult Get()
-        {
-            if (Request.Headers.Accept.ToString().Contains("application/json") || Request.Headers.Accept.ToString().Contains("application/xml"))
-            {
-                try
-                {
-                    var students = studentRepository.GetAll();
-
-                    return Ok(students);
-                }
-                catch (Exception)
-                {
-                    return Conflict();
-                }
-            }
-            else
-            {
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NotAcceptable));
-            }
-        }
-
-        public IHttpActionResult Get(int id)
+        public StudentsController()
+            : base("Student")
         {
 
-            if (Request.Headers.Accept.ToString().Contains("application/json") || Request.Headers.Accept.ToString().Contains("application/xml"))
-            {
-                try
-                {
-                    var student = studentRepository.GetById(id.ToString());
-
-                    if (student == null)
-                    {
-                        return NotFound();
-                    }
-
-                    return Ok(student);
-                }
-                catch (Exception)
-                {
-                    return Conflict();
-                }
-            }
-            else
-            {
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NotAcceptable));
-            }
         }
 
-        public IHttpActionResult Post([FromBody]RestApi.Model.Student value)
+        [Route()]
+        [HttpGet]
+        public IHttpActionResult Get(string index = null, string firstName = null, string lastname = null, string birthdateFrom = null, string birthdateTo = null)
+        {
+            var builder = Builders<Student>.Filter;
+            var filter = builder.Empty;
+
+            if (!string.IsNullOrEmpty(firstName))
+                filter &= builder.Eq(x => x.FirstName, firstName);
+            if (!string.IsNullOrEmpty(lastname))
+                filter &= builder.Eq(x => x.LastName, lastname);
+            if (!string.IsNullOrEmpty(index))
+                filter &= builder.Eq(x => x.Index, index);
+
+            var list = GetMethod(filter);
+
+            if (!string.IsNullOrEmpty(birthdateFrom))
+            {
+                var dateFrom = DateTime.Parse(birthdateFrom);
+                list = list.Where(x => DateTime.Parse(x.BirthDate) >= dateFrom);
+            }
+            if (!string.IsNullOrEmpty(birthdateTo))
+            {
+                var dateTo = DateTime.Parse(birthdateTo);
+                list = list.Where(x => DateTime.Parse(x.BirthDate) <= dateTo);
+            }
+
+            if (list.Count() == 0)
+                return NotFound();
+
+            return Ok(list);
+        }
+
+        [Route("{studentIndex}")]
+        [HttpGet]
+        public IHttpActionResult Get(string studentIndex)
+        {
+
+            var student = GetMethod(x => x.Index == studentIndex).SingleOrDefault();
+
+            if (student == null)
+                return NotFound();
+
+            return Ok(student);
+        }
+
+
+        [Route()]
+        [HttpPost]
+        public IHttpActionResult Post([FromBody]Student student)
         {
             try
             {
-                var student = studentRepository.GetById(value.Index.ToString());
-
-                if (student == null)
-                {
-                    studentRepository.Insert(value);
-                    return Created(Request.RequestUri + "/" + value.Index.ToString(), value);
-                }
-                else
-                {
-                    return Conflict();
-                }
+                var created = PostMethod(student);
+                return Created(string.Format("{0}/{1}", Request.RequestUri, created.Id), created);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return Conflict();
+                return InternalServerError(ex);
             }
         }
 
-        public IHttpActionResult Put(int id, [FromBody]RestApi.Model.Student value)
+        [Route("{studentIndex}")]
+        [HttpPut]
+        public IHttpActionResult Put(string studentIndex, [FromBody] Student student)
         {
-            try
-            {
-                studentRepository.Update(id.ToString(), value);
-                return Ok();
-            }
-            catch (Exception)
-            {
-                return Conflict();
-            }
+            var studentToUpdate = GetMethod(x => x.Index == studentIndex).SingleOrDefault();
+
+            var updateDefinition = Builders<Student>.Update
+                .Set(x => x.BirthDate, student.BirthDate)
+                .Set(x => x.FirstName, student.FirstName)
+                .Set(x => x.LastName, student.LastName);
+
+            return PutMethod(studentToUpdate.Id, updateDefinition);
         }
 
-        public IHttpActionResult Delete(int id)
+        [Route("{studentIndex}")]
+        [HttpDelete]
+        public IHttpActionResult Delete(string studentIndex)
         {
-            try
-            {
-                if (studentRepository.Delete(id.ToString()))
-                    return Ok();
-                else
-                    return NotFound();
-            }
-            catch (Exception)
-            {
-                return Conflict();
-            }
+            var student = GetMethod(x => x.Index == studentIndex).SingleOrDefault();
+            return DeleteMethod(student.Id.ToString());
         }
     }
 }

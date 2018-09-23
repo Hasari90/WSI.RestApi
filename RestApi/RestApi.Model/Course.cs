@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Web;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using RestApi.Model.Interface;
 
 namespace RestApi.Model
 {
-    [DataContract]
-    public class Course
+    public class Course : IId<ObjectId>
     {
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string ObjectId { get; set; }
-        [DataMember]
-        [BsonRequired]
+        public ObjectId Id { get; set; }
         public string Name { get; set; }
-        [DataMember]
-        [BsonRequired]
-        public string Teacher { get; set; }
+        public string LeadTeacher { get; set; }
+        public string ECTS { get; set; }
     }
 }

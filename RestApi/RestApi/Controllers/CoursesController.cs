@@ -1,160 +1,81 @@
-﻿using RestApi.Base;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using RestApi.Model;
-using RestApi.Repository.Repositories;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Formatting;
 using System.Web.Http;
 
 namespace RestApi.Controllers
 {
-    public class CoursesController : ApiController
+    [RoutePrefix("api/courses")]
+    public class CoursesController : BaseApiController<Course>
     {
-        private CourseRepository courseRepository = Program.courseRepository;
-
-        [Route("api/courses")]
-        [HttpGet]
-        public IHttpActionResult Get()
+        public CoursesController()
+            : base("Course")
         {
-            if (Request.Headers.Accept.ToString().Contains("application/json") || Request.Headers.Accept.ToString().Contains("application/xml"))
-            {
-                try
-                {
-                    var courses = courseRepository.GetAll();
 
-                    return Ok(courses);
-                }
-                catch (Exception)
-                {
-                    return Conflict();
-                }
-            }
-            else
-            {
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NotAcceptable));
-            }
         }
 
-        [Route("api/students/{index}/courses/")]
-        [HttpGet]
-        public IHttpActionResult Get(int index)
-        {
-            if (Request.Headers.Accept.ToString().Contains("application/json") || Request.Headers.Accept.ToString().Contains("application/xml"))
-            {
-                try
-                {
-                    var courses = courseRepository.GetAll();
-                    //var courses = courseRepository.GetById(index);
-
-                    if (courses == null)
-                    {
-                        return NotFound();
-                    }
-
-                    return Ok(courses);
-                }
-                catch (Exception)
-                {
-                    return Conflict();
-                }
-            }
-            else
-            {
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NotAcceptable));
-            }
-        }
-
-        [Route("api/students/{index}/courses/{course}")]
-        [HttpGet]
-        public IHttpActionResult Get(int index,string course)
-        {
-            if (Request.Headers.Accept.ToString().Contains("application/json") || Request.Headers.Accept.ToString().Contains("application/xml"))
-            {
-                try
-                {
-                    var courses = courseRepository.GetById(course);
-
-                    if (courses == null)
-                    {
-                        return NotFound();
-                    }
-
-                    return Ok(courses);
-                }
-                catch(Exception)
-                {
-                    return Conflict();
-                }
-            }
-            else
-            {
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NotAcceptable));
-            }
-        }
-
-        [Route("api/students/courses")]
-        [HttpPost]
-        public IHttpActionResult Post([FromBody]RestApi.Model.Course value)
-        {
-            try
-            {
-                courseRepository.Insert(value);
-                return Created(Request.RequestUri + "/" + value.Name, value);
-            }
-            catch (Exception)
-            {
-                return Conflict();
-            }
-        }
-
-        [Route("api/students/{index}/courses")]
-        [HttpPost]
-        public IHttpActionResult Post(int index,[FromBody]RestApi.Model.Course value)
-        {
-            try
-            {
-                courseRepository.Insert(value);
-                return Created(Request.RequestUri + "/" + value.Name, value);
-            }
-            catch (Exception)
-            {
-                return Conflict();
-            }
-        }
-
-        [Route("api/students/{index}/courses/{course}")]
-        [HttpPut]
-        public IHttpActionResult Put(string course, [FromBody]RestApi.Model.Course value)
-        {
-            try
-            {
-                courseRepository.Update(course, value);
-                return Ok();
-            }
-            catch (Exception)
-            {
-                return Conflict();
-            }
-        }
-
-        [Route("api/students/{index}/courses/{course}")]
+        [Route("{courseID}")]
         [HttpDelete]
-        public IHttpActionResult Delete(string course)
+        public IHttpActionResult Delete(string courseID)
+            => DeleteMethod(courseID);
+
+        [Route()]
+        [HttpGet]
+        public IHttpActionResult Get(string name = null, string leadTeacher = null)
+        {
+            var builder = Builders<Course>.Filter;
+            var filter = builder.Empty;
+            if (!string.IsNullOrEmpty(name))
+                filter &= builder.Eq(x => x.Name, name);
+            if (!string.IsNullOrEmpty(leadTeacher))
+                filter &= builder.Eq(x => x.LeadTeacher, leadTeacher);
+
+            var list = GetMethod(filter);
+            if (list.Count() == 0)
+                return NotFound();
+
+            return Ok(list);
+        }
+
+        [Route("{courseID}")]
+        [HttpGet]
+        public IHttpActionResult GetCourse(string courseID)
+        {
+            var course = GetMethod(x => x.Id == ObjectId.Parse(courseID));
+
+            if (course == null)
+                return NotFound();
+
+            return Ok(course);
+        }
+
+        [Route()]
+        [HttpPost]
+        public IHttpActionResult Post([FromBody] Course course)
         {
             try
-            {
-                if (courseRepository.Delete(course))
-                    return Ok();
-                else
-                    return NotFound();
+            { 
+            var created = PostMethod(course);
+            return Created(string.Format("{0}/{1}", Request.RequestUri, created.Id), created);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return Conflict();
+                return InternalServerError(ex);
             }
+        }
+
+        [Route("{courseID}")]
+        [HttpPut]
+        public IHttpActionResult Put(string courseID, [FromBody] Course course)
+        {
+            var updateDefinition = Builders<Course>.Update
+                .Set(x => x.LeadTeacher, course.LeadTeacher)
+                .Set(x => x.Name, course.Name)
+                .Set(x => x.ECTS, course.ECTS);
+
+            return PutMethod(courseID, updateDefinition);
         }
     }
 }

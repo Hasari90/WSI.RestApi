@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using RestApi.Model;
 using MongoDB.Driver;
+using RestApi.Parameter;
 
 namespace RestApi.Repository.Repositories
 {
@@ -22,17 +22,17 @@ namespace RestApi.Repository.Repositories
             IMongoDatabase db = client.GetDatabase("RestApi");
 
             mongoCollection = db.GetCollection<Student>("students");
+            var options = new CreateIndexOptions() { Unique = true };
+            var field = new StringFieldDefinition<Student>("Index");
+            var indexDefinition = new IndexKeysDefinitionBuilder<Student>().Ascending(field);
+            mongoCollection.Indexes.CreateOne(indexDefinition, options);
         }
 
         public bool Delete(string id)
         {
             try
             {
-                var student = GetById(id);
-                if (student != null)
-                    list.RemoveAll(s => s.Index == Convert.ToInt32(id));
-                else
-                    return false;
+                //mongoCollection.DeleteOne(s => s.Index == Convert.ToInt32(id));
             }
             catch (Exception)
             {
@@ -43,29 +43,73 @@ namespace RestApi.Repository.Repositories
 
         public IEnumerable<Student> GetAll()
         {
-            //return mongoCollection.Find(Builders<Student>.Filter.Empty).ToEnumerable();
-            return list;
+            return mongoCollection.Find(Builders<Student>.Filter.Empty).ToEnumerable();
+        }
+
+        public IEnumerable<Student> GetAll(StudentParameter studentParameter = null)
+        {
+            //var builder = Builders<Student>.Filter;
+            //var filter = builder.Empty;
+
+            //if (studentParameter != null)
+            //{
+            //    if (studentParameter.Name != null)
+            //        filter &= builder.Where(
+            //            student => student.Name.ToLower().Contains(studentParameter.Name.ToLower()));
+
+            //    if (studentParameter.Lastname != null)
+            //       // filter &= builder.Where(
+            //            //student => student.Lastname.ToLower().Contains(studentParameter.Lastname.ToLower()));
+
+            //    if (studentParameter.Date != null)
+            //        filter &= builder.Eq("Date", studentParameter.Date);
+
+            //    if (studentParameter.DateAfter != null)
+            //        filter &= builder.Gte("Date", studentParameter.DateAfter);
+
+            //    if (studentParameter.DateBefore != null)
+            //        filter &= builder.Lte("Date", studentParameter.DateBefore);
+            //}
+
+            // return mongoCollection.Find(filter).ToEnumerable();
+            return null;
         }
 
         public Student GetById(string id)
         {
-            var student = list.FirstOrDefault(s => s.Index == Convert.ToInt32(id));
-            return student;
+            
+            try
+            {
+                //var student = mongoCollection.AsQueryable<Student>().Where(s => s.Index == Convert.ToInt32(id)).Single();
+                //   return student;
+                return null;
+            }
+            catch(Exception)
+            {
+                return null;
+            }  
         }
 
         public void Insert(Student model)
         {
-                list.Add(model);
+            if (model != null)
+            {
+                mongoCollection.InsertOne(model);
+            }
         }
 
         public void Update(string id, Student model)
         {
-            var student = list.First(s => s.Index == Convert.ToInt32(id));
+            //var filter = Builders<Student>.Filter.And(
+            //                    Builders<Student>.Filter.Where(s => s.Index == Convert.ToInt64(id)));
 
-            student.Name = model.Name;
-            student.Lastname = model.Lastname;
-            student.Date = model.Date;
-            student.Grades = model.Grades;
+            //var update = Builders<Student>.Update
+            //    .Set("Name", model.Name)
+            //    .Set("Lastname", model.Lastname)
+            //    .Set("Date", model.Date)
+            //    .Set("Grades", model.Grades);
+
+            //mongoCollection.UpdateOne(filter, update);
         }
     }
 }

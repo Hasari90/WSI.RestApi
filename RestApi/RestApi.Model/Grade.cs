@@ -1,33 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Web;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-
+using MongoDB.Driver;
+using RestApi.Model.Interface;
 
 namespace RestApi.Model
 {
-    [DataContract]
-    public class Grade
+    public class Grade : IId<ObjectId>
     {
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string ObjectId { get; set; }
-        [DataMember]
-        public int Id { get; set; }
-        [DataMember]
-        [BsonRequired]
-        public double Mark { get; set; }
-        [DataMember]
-        [BsonRequired]
-        public DateTime Date { get; set; }
-        [DataMember]
-        [BsonRequired]
+        public ObjectId Id { get; set; }
+
+        public decimal GradeValue { get; set; }
+        public string AddedDate { get; set; }
+
+        public MongoDBRef CourseID { get; set; }
         public string CourseName { get; set; }
-        [DataMember]
-        [BsonIgnore]
-        public Course Course { get; set; }
+
+        public Grade()
+        {
+            if (Id.Equals(ObjectId.Empty))
+                Id = ObjectId.GenerateNewId();
+
+        }
     }
 }
